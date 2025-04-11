@@ -21,6 +21,11 @@ pipeline {
                 volumeMounts:
                 - mountPath: "/var/run/docker.sock"
                   name: docker-socket
+              - name: node
+                image: node:20-alpine
+                command:
+                - cat
+                tty: true
               volumes:
               - name: docker-socket
                 hostPath:
@@ -36,20 +41,22 @@ pipeline {
     }
 
     stages {
-        stage('Gradle & Frontend Build') {
+        stage('Gradle Build') {
             steps {
                 container('maven') {
-                    script {
-                        // 백엔드 빌드
-                        // sh 'cd backend && chmod +x gradlew && ./gradlew -v && ./gradlew clean && ./gradlew build'
+                    sh 'cd backend && chmod +x gradlew && ./gradlew clean build'
+                }
+            }
+        }
 
-                        // 프론트엔드 빌드
-                        sh '''
-                            cd frontend
-                            npm install
-                            npm run build
-                        '''
-                    }
+        stage('Frontend Build') {
+            steps {
+                container('node') {
+                    sh '''
+                        cd frontend
+                        npm install
+                        npm run build
+                    '''
                 }
             }
         }
