@@ -88,13 +88,12 @@ pipeline {
             }
         }
 
-        /*
-        stage('Trigger university-k8s-manifests') {
+        stage('Trigger bucams-k8s-manifests') {
             steps {
                 script {
                     def dockerImageVersion = "${env.BUILD_NUMBER}"
                     withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
-                        build job: 'university-k8s-manifests',
+                        build job: 'bucams-k8s-manifests',
                           parameters: [
                               string(name: 'DOCKER_IMAGE_VERSION', value: "${DOCKER_IMAGE_VERSION}")
                           ],
@@ -103,7 +102,7 @@ pipeline {
                 }
             }
         }
-        */
+        
     }
 
     /*
