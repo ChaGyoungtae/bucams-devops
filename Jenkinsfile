@@ -54,7 +54,7 @@ pipeline {
                 container('maven') {
                     sh 'pwd'
                     sh 'ls -al'
-                    sh 'cd backend && ./gradlew -v && ./gradlew clean && ./gradlew build'
+                    sh 'cd backend && chmod +x gradlew && ./gradlew -v && ./gradlew clean && ./gradlew build'
                     sh 'ls -al backend/build/libs'
                 }
             }
