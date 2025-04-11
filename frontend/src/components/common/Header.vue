@@ -45,7 +45,7 @@
               강의 관리
             </RouterLink>
           </li>
-          <li v-if="authStore.memberInfo.role === 'ADMIN' && memberId">
+          <li v-if="authStore.memberInfo.role === 'MEMBER' && memberId">
             <RouterLink :to="{ name: 'MyRegistration', params: { memberId } }" class="nav-link px-3 text-white">나의 수강신청 조회</RouterLink>
           </li>
           <li v-if="authStore.memberInfo.role === 'ADMIN'">
