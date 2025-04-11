@@ -7,4 +7,4 @@ ENV TZ=Asia/Seoul
 ENV APP_PROFILE=${BUILD_PROFILE}
 EXPOSE ${BUILD_PORT}
 WORKDIR /root
-CMD [ "java", "-jar", "backend-0.0.1-SNAPSHOT.jar"
+CMD [ "java", "-jar", "backend-0.0.1-SNAPSHOT.jar" ]
