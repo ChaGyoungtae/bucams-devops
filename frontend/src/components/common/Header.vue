@@ -27,6 +27,9 @@
               수강 신청
             </RouterLink>
           </li>
+          <li v-if="memberId">
+             <RouterLink :to="{ name: 'MyRegistration', params: { memberId } }" class="nav-link px-3 text-white">나의 수강신청 조회</RouterLink>
+           </li>
           <li>
             <RouterLink :to="{ name: 'departments' }" class="nav-link px-3 text-white">
               학과 전체 조회
