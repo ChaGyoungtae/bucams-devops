@@ -41,25 +41,25 @@ pipeline {
     }
 
     stages {
-        stage('Gradle Build') {
-            steps {
-                container('maven') {
-                    sh 'cd backend && chmod +x gradlew && ./gradlew clean build'
-                }
-            }
-        }
+        // stage('Gradle Build') {
+        //     steps {
+        //         container('maven') {
+        //             sh 'cd backend && chmod +x gradlew && ./gradlew clean build'
+        //         }
+        //     }
+        // }
 
-        stage('Frontend Build') {
-            steps {
-                container('node') {
-                    sh '''
-                        cd frontend
-                        npm install
-                        npm run build
-                    '''
-                }
-            }
-        }
+        // stage('Frontend Build') {
+        //     steps {
+        //         container('node') {
+        //             sh '''
+        //                 cd frontend
+        //                 npm install
+        //                 npm run build
+        //             '''
+        //         }
+        //     }
+        // }
 
         // stage('Image Build & Push - Backend') {
         //     steps {
@@ -86,30 +86,30 @@ pipeline {
         //     }
         // }
 
-        stage('Image Build & Push - Frontend') {
-            steps {
-                container('docker') {
-                    script {
-                        def dockerImageVersion = "${env.BUILD_NUMBER}"
+        // stage('Image Build & Push - Frontend') {
+        //     steps {
+        //         container('docker') {
+        //             script {
+        //                 def dockerImageVersion = "${env.BUILD_NUMBER}"
 
-                        withCredentials([usernamePassword(
-                            credentialsId: DOCKER_CREDENTIALS_ID,
-                            usernameVariable: 'DOCKER_USERNAME',
-                            passwordVariable: 'DOCKER_PASSWORD'
-                        )]) {
-                            sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                        }
+        //                 withCredentials([usernamePassword(
+        //                     credentialsId: DOCKER_CREDENTIALS_ID,
+        //                     usernameVariable: 'DOCKER_USERNAME',
+        //                     passwordVariable: 'DOCKER_PASSWORD'
+        //                 )]) {
+        //                     sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+        //                 }
 
-                        withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
-                            sh 'pwd'
-                            sh 'ls -al'
-                            sh 'docker build --no-cache -t $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION ./frontend'
-                            sh 'docker push $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION'
-                        }
-                    }
-                }
-            }
-        }
+        //                 withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
+        //                     sh 'pwd'
+        //                     sh 'ls -al'
+        //                     sh 'docker build --no-cache -t $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION ./frontend'
+        //                     sh 'docker push $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Trigger bucams-k8s-manifests') {
             steps {
