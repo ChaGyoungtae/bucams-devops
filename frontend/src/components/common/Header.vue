@@ -27,9 +27,9 @@
               수강 신청
             </RouterLink>
           </li>
-          <li v-if="memberId">
-             <RouterLink :to="{ name: 'MyRegistration', params: { memberId } }" class="nav-link px-3 text-white">나의 수강신청 조회</RouterLink>
-           </li>
+          <li v-if="authStore.memberInfo.role === 'STUDENT' && memberId">
+            <RouterLink :to="{ name: 'MyRegistration', params: { memberId } }" class="nav-link px-3 text-white">나의 수강신청 조회</RouterLink>
+          </li>
           <li>
             <RouterLink :to="{ name: 'departments' }" class="nav-link px-3 text-white">
               학과 전체 조회
@@ -45,9 +45,7 @@
               강의 관리
             </RouterLink>
           </li>
-          <li v-if="authStore.memberInfo.role === 'MEMBER' && memberId">
-            <RouterLink :to="{ name: 'MyRegistration', params: { memberId } }" class="nav-link px-3 text-white">나의 수강신청 조회</RouterLink>
-          </li>
+
           <li v-if="authStore.memberInfo.role === 'ADMIN'">
             <RouterLink :to="{ name: 'DurationOfRegistration' }" class="nav-link px-3 text-white">
               수강 신청 기간 관리
