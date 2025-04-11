@@ -5,8 +5,8 @@
             <ul style="list-style-type: none; margin: 0; padding: 0;">
                 <li class="registration-item">
                     <div class="registration-registeredAt">
-                        <strong>Registered At </strong> {{ registration.registeredAt }}
-                        <strong>강의명:</strong> {{ registration.lectureName }}
+                        <strong>신청날짜 </strong> {{ registration.registeredAt }}<br>
+                        <strong>강의명:</strong> {{ registration.lectureName }}<br>
                         <strong>교수명:</strong> {{ registration.professorName }}
                     </div>
 
