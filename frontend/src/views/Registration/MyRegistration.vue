@@ -6,14 +6,10 @@
                 <li class="registration-item">
                     <div class="registration-registeredAt">
                         <strong>Registered At </strong> {{ registration.registeredAt }}
+                        <strong>강의명:</strong> {{ registration.lectureName }}
+                        <strong>교수명:</strong> {{ registration.professorName }}
                     </div>
-                    <div class="registration-lectureId">
-                        <strong>Lecture ID:</strong> {{ registration.lectureId }}
-                        <!-- <strong>강의명:</strong> {{ registration.lectureName }} -->
-                    </div>
-                    <div class="registration-memberId">
-                        <strong>Member ID:</strong> {{ registration.memberId }}
-                    </div>
+
                 </li>
             </ul>
             <div class="button-container ms-auto">
