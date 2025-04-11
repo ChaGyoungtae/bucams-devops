@@ -31,36 +31,20 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_NAME = 'village1031/bucams-api'
-        DOCKER_CREDENTIALS_ID = 'dockerhub-access' // 오타 수정됨
+        DOCKER_IMAGE_NAME_FRONTEND = 'village1031/bucams-vue'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-access'
     }
 
     stages {
-        /*
-        stage('SonarQube Analysis') {
-            steps {
-                container('maven') {
-                    withSonarQubeEnv('sonarqube-server') {
-                        sh '''mvn clean verify sonar:sonar \
-                            -Dsonar.projectKey=university-api \
-                            -Dsonar.projectName=university-api'''
-                    }
-                }
-            }
-        }
-        */
-
         stage('Gradle Build') {
             steps {
                 container('maven') {
-                    sh 'pwd'
-                    sh 'ls -al'
                     sh 'cd backend && chmod +x gradlew && ./gradlew -v && ./gradlew clean && ./gradlew build'
-                    sh 'ls -al backend/build/libs'
                 }
             }
         }
 
-        stage('Image Build & Push') {
+        stage('Image Build & Push - Backend') {
             steps {
                 container('docker') {
                     script {
@@ -77,11 +61,31 @@ pipeline {
                         }
 
                         withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
-                            sh 'docker -v'
-                            sh 'echo $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION'
                             sh 'docker build --no-cache -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION ./backend'
-                            sh 'docker image inspect $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION'
                             sh 'docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Image Build & Push - Frontend') {
+            steps {
+                container('docker') {
+                    script {
+                        def dockerImageVersion = "${env.BUILD_NUMBER}"
+
+                        withCredentials([usernamePassword(
+                            credentialsId: DOCKER_CREDENTIALS_ID,
+                            usernameVariable: 'DOCKER_USERNAME',
+                            passwordVariable: 'DOCKER_PASSWORD'
+                        )]) {
+                            sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                        }
+
+                        withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
+                            sh 'docker build --no-cache -t $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION ./frontend'
+                            sh 'docker push $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION'
                         }
                     }
                 }
@@ -102,58 +106,5 @@ pipeline {
                 }
             }
         }
-        
     }
-
-    /*
-    post {
-        always {
-            withCredentials([string(
-                credentialsId: 'discord-webhook',
-                variable: 'DISCORD_WEBHOOK_URL'
-            )]) {
-                discordSend description: """
-                제목 : ${currentBuild.displayName}
-                결과 : ${currentBuild.result}
-                실행 시간 : ${currentBuild.duration / 1000}s
-                """,
-                result: currentBuild.currentResult,
-                title: "${env.JOB_NAME} : ${currentBuild.displayName}",
-                webhookURL: "${DISCORD_WEBHOOK_URL}"
-            }
-        }
-
-        success {
-            withCredentials([string(
-                credentialsId: 'discord-webhook',
-                variable: 'DISCORD_WEBHOOK_URL'
-            )]) {
-                discordSend description: """
-                제목 : ${currentBuild.displayName}
-                결과 : ${currentBuild.result}
-                실행 시간 : ${currentBuild.duration / 1000}s
-                """,
-                result: currentBuild.currentResult,
-                title: "${env.JOB_NAME} : ${currentBuild.displayName} 성공",
-                webhookURL: "${DISCORD_WEBHOOK_URL}"
-            }
-        }
-
-        failure {
-            withCredentials([string(
-                credentialsId: 'discord-webhook',
-                variable: 'DISCORD_WEBHOOK_URL'
-            )]) {
-                discordSend description: """
-                제목 : ${currentBuild.displayName}
-                결과 : ${currentBuild.result}
-                실행 시간 : ${currentBuild.duration / 1000}s
-                """,
-                result: currentBuild.currentResult,
-                title: "${env.JOB_NAME} : ${currentBuild.displayName} 실패",
-                webhookURL: "${DISCORD_WEBHOOK_URL}"
-            }
-        }
-    }
-    */
 }
