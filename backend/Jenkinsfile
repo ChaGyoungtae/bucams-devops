@@ -1,0 +1,38 @@
+// 선언형 파이프라인의 최상위 블록
+pipeline {
+  agent any
+  options {
+    // 추가 옵션 설정
+  }
+  environment {
+    // 환경 변수를 설정
+  }
+  stages {
+    stage('Build') {
+      steps {
+        // 단계에서 실행될 작업
+      }
+    }
+    stage('Test') {
+      steps {
+        // 단계에서 실행될 작업
+      }
+    }
+    stage('Deploy') {
+      steps {
+        // 단계에서 실행될 작업
+      }
+    }
+  }
+  post {
+    always {
+      // 모든 빌드 결과에 실행될 작업
+    }
+    success {
+      // 빌드 성공 시 실행될 작업
+    }
+    failure {
+      // 빌드 실패 시 실행될 작업
+    }
+  }
+}

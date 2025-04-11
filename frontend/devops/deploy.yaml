@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bucams-vue-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bucams-vue
+  template:
+    metadata:
+      labels:
+        app: bucams-vue
+    spec:
+      containers:
+      - name: bucmas-vue
+        image: bucams-vue:1.1
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "500m"
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 80

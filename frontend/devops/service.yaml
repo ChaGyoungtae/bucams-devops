@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bucams-vue-service
+spec:
+  type: ClusterIP
+  selector:
+    app: bucams-vue
+  ports:
+  - port: 80
+    targetPort: 80
