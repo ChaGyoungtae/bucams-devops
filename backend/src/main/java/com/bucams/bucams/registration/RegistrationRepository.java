@@ -27,7 +27,7 @@ public class RegistrationRepository {
     public List<RegistrationRequestDto> findRegistrationRequestDtoByMemberId(Long memberId) {
         return em.createQuery(
                         "SELECT new com.bucams.bucams.registration.dto.RegistrationRequestDto(" +
-                                "r.id, r.member.id, r.lecture.id, r.registeredAt) " +
+                                "r.id, r.member.id, r.lecture.id, r.lecture.name, r.lecture.member.name, r.registeredAt) " +
                                 " FROM Registration r WHERE r.member.id = :memberId", RegistrationRequestDto.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
@@ -64,7 +64,7 @@ public class RegistrationRepository {
     public List<RegistrationRequestDto> findAllRegistrations() {
         return em.createQuery(
                         "SELECT new com.bucams.bucams.registration.dto.RegistrationRequestDto(" +
-                                "r.id, r.member.id, r.lecture.id, r.registeredAt) " +
+                                "r.id, r.member.id, r.lecture.id, r.lecture.name, r.lecture.member.name, r.registeredAt) " +
                                 "FROM Registration r", RegistrationRequestDto.class)
                 .getResultList();
     }
