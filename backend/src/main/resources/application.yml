@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb-service:3306/web
+    username: root
+    password: 'root'
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  profiles:
+    active: local
+
+management:   # <-- spring 바깥에 위치해야 함!!
+  server:
+    port: 8080
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
