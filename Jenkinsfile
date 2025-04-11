@@ -36,38 +36,48 @@ pipeline {
     }
 
     stages {
-        stage('Gradle Build') {
+        stage('Gradle & Frontend Build') {
             steps {
                 container('maven') {
-                    sh 'cd backend && chmod +x gradlew && ./gradlew -v && ./gradlew clean && ./gradlew build'
-                }
-            }
-        }
-
-        stage('Image Build & Push - Backend') {
-            steps {
-                container('docker') {
                     script {
-                        def dockerImageVersion = "${env.BUILD_NUMBER}"
+                        // 백엔드 빌드
+                        // sh 'cd backend && chmod +x gradlew && ./gradlew -v && ./gradlew clean && ./gradlew build'
 
-                        sh 'docker logout'
-
-                        withCredentials([usernamePassword(
-                            credentialsId: DOCKER_CREDENTIALS_ID,
-                            usernameVariable: 'DOCKER_USERNAME',
-                            passwordVariable: 'DOCKER_PASSWORD'
-                        )]) {
-                            sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                        }
-
-                        withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
-                            sh 'docker build --no-cache -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION ./backend'
-                            sh 'docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION'
-                        }
+                        // 프론트엔드 빌드
+                        sh '''
+                            cd frontend
+                            npm install
+                            npm run build
+                        '''
                     }
                 }
             }
         }
+
+        // stage('Image Build & Push - Backend') {
+        //     steps {
+        //         container('docker') {
+        //             script {
+        //                 def dockerImageVersion = "${env.BUILD_NUMBER}"
+
+        //                 sh 'docker logout'
+
+        //                 withCredentials([usernamePassword(
+        //                     credentialsId: DOCKER_CREDENTIALS_ID,
+        //                     usernameVariable: 'DOCKER_USERNAME',
+        //                     passwordVariable: 'DOCKER_PASSWORD'
+        //                 )]) {
+        //                     sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+        //                 }
+
+        //                 withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
+        //                     sh 'docker build --no-cache -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION ./backend'
+        //                     sh 'docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Image Build & Push - Frontend') {
             steps {
@@ -84,6 +94,8 @@ pipeline {
                         }
 
                         withEnv(["DOCKER_IMAGE_VERSION=${dockerImageVersion}"]) {
+                            sh 'pwd'
+                            sh 'ls -al'
                             sh 'docker build --no-cache -t $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION ./frontend'
                             sh 'docker push $DOCKER_IMAGE_NAME_FRONTEND:$DOCKER_IMAGE_VERSION'
                         }
