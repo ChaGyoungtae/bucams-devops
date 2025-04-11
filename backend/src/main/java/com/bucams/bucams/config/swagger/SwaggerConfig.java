@@ -17,8 +17,8 @@ public class SwaggerConfig {
         return new OpenAPI()
             .addServersItem(server)
             .info(new Info()
-                .title("API Documentation")
-                .version("1.0")
+                .title("Bucams RESTful API Documentation")
+                .version("2.0")
                 .description("API 명세서"));
     }
 }
