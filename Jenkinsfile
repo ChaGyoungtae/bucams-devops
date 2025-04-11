@@ -46,21 +46,16 @@ pipeline {
         //         }
         //     }
         // }
-        // Maven Build 자동화
-            stage('Gradle Build') {
-                steps {
-                    container('gradle') {
-                        sh 'pwd'
-                        sh 'ls -al'
-                        sg 'cd backend'
-                        sh './gradlew -v'         // Gradle 버전 확인
-                        sh './gradlew clean'      // 빌드 클린
-                        sh './gradlew build'      // 실제 빌드 수행
-                        sh 'ls -al'
-                        sh 'ls -al ./build/libs'  // Gradle 빌드 결과물 위치
-                    }
+        stage('Gradle Build') {
+            steps {
+                container('maven') { // gradle 컨테이너가 없다면 maven 컨테이너에서 실행
+                    sh 'pwd'
+                    sh 'ls -al'
+                    sh 'cd backend && ./gradlew -v && ./gradlew clean && ./gradlew build'
+                    sh 'ls -al backend/build/libs'
                 }
             }
+        }
 
         stage('Image Build & Push') {
             steps {
