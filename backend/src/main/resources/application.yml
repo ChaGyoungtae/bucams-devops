@@ -2,17 +2,21 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://mariadb-service:3306/web
+#    url: jdbc:mariadb://localhost:3306/web
     username: root
     password: 'root'
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
         format_sql: true
   profiles:
     active: local
+  sql:
+    init:
+      mode: never
 
 management:   # <-- spring 바깥에 위치해야 함!!
   server:

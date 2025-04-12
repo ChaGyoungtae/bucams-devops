@@ -92,25 +92,39 @@
       </div>
     </div>
 
-
-    <div class="list-group">
-      <div class="list-group-item list-group-item-action d-flex gap-3 py-3" 
-          v-for="(registration, index) in registrations" :key="index">
-          <ul style="list-style-type: none; margin: 0; padding: 0;">
-              <li class="registration-item">
-                  <div class="registration-registeredAt">
-                      <strong>Registered At </strong> {{ registration.registeredAt }}
-                  </div>
-                  <div class="registration-lectureId">
-                      <strong>Lecture ID:</strong> {{ registration.lectureId }}
-                  </div>
-                  <div class="registration-memberId">
-                      <strong>Member ID:</strong> {{ registration.memberId }}
-                  </div>
-              </li>
-          </ul>
-      </div>
-  </div>
+  <div class="container mt-4">
+  <h3 class="mb-3">수강 등록 목록</h3>
+  <table class="table table-striped table-hover align-middle text-center">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">등록일시</th>
+        <th scope="col">학생 이름</th>
+        <th scope="col">강의 이름</th>
+        <th scope="col">교수 이름</th>
+        <th scope="col">강의 ID</th>
+        <th scope="col">회원 ID</th>
+        <th scope="col">시간표</th>
+        <th scope="col">전공 유형</th>
+        <th scope="col">학점</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(registration, index) in registrations" :key="index">
+        <th scope="row">{{ index + 1 }}</th>
+        <td>{{ registration.registeredAt }}</td>
+        <td>{{ registration.studentName }}</td>
+        <td>{{ registration.lectureName }}</td>
+        <td>{{ registration.professorName }}</td>
+        <td>{{ registration.lectureId }}</td>
+        <td>{{ registration.memberId }}</td>
+        <td>{{ registration.schedule }}</td>
+        <td>{{ registration.type }}</td>
+        <td>{{ registration.credit }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
   </template>
   
   <script setup>

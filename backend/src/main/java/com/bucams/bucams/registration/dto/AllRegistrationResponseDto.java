@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationResponseDto {
+public class AllRegistrationResponseDto {
 
     private Long registrationId;
 
@@ -24,6 +24,8 @@ public class RegistrationResponseDto {
     private LocalDateTime registeredAt;
 
     private Long lectureId;
+
+    private String studentName;
 
     private String lectureName;
 

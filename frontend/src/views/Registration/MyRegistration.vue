@@ -1,35 +1,42 @@
 <template>
-    <div class="list-group">
-        <div class="list-group-item list-group-item-action d-flex gap-3 py-3" 
-            v-for="(registration, index) in registrations" :key="index">
-            <ul style="list-style-type: none; margin: 0; padding: 0;">
-                <li class="registration-item">
-                    <div class="registration-registeredAt">
-                        <strong>신청날짜 </strong> {{ registration.registeredAt }}<br>
-                        <strong>강의명:</strong> {{ registration.lectureName }}<br>
-                        <strong>교수명:</strong> {{ registration.professorName }}
-                    </div>
-
-                </li>
-            </ul>
-            <div class="button-container ms-auto">
-        <!-- 삭제 버튼 -->
-        <!-- <button
-            @click.stop="confirmDelete(index, registration.lectureId)"
-            class="btn btn-outline-danger btn-sm"
-        >Delete
-        </button>-->
-        </div>             
-            <div class="button-container ms-auto">
-                <button 
-                    @click.stop="deleteRegistration(index)" 
-                    class="btn btn-outline-danger btn-sm">
-                    Delete
-                </button>
-            </div>
-        </div>
+    <div class="container mt-4">
+      <h3 class="mb-3">수강 신청 목록</h3>
+      <table class="table table-striped table-hover align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>신청 날짜</th>
+            <th>강의명</th>
+            <th>교수명</th>
+            <th>시간표</th>
+            <th>전공 유형</th>
+            <th>학점</th>
+            <th>삭제</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(registration, index) in registrations" :key="index">
+            <th scope="row">{{ index + 1 }}</th>
+            <td>{{ registration.registeredAt }}</td>
+            <td>{{ registration.lectureName }}</td>
+            <td>{{ registration.professorName }}</td>
+            <td>{{ registration.schedule }}</td>
+            <td>{{ registration.type }}</td>
+            <td>{{ registration.credit }}</td>
+            <td>
+              <button
+                @click.stop="deleteRegistration(index)"
+                class="btn btn-outline-danger btn-sm"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-</template>
+  </template>
+  
 
 <script setup>
 import apiClient from '@/api/axios.js';
@@ -50,10 +57,6 @@ onMounted(async() => {
     
     memberId.value = String(route.params.memberId);
 
-    // memberId 잘 받아오는지 확인
-    // console.log(String(route.params.memberId));
-    // console.log(memberId.value);
-
     apiClient.get(`/registration/${memberId.value}`)
     .then(response => {
         registrations.value = response.data;
@@ -64,47 +67,6 @@ onMounted(async() => {
 
 });
 
-  // 멤버 이름 가져오기 - 보류
-// onMounted(async () => {
-//     // console.log(lecture);
-//     // 이름 받아올려고 추가 lectureName.value = lecture.value.name;
-//     apiClient.get('members/my-info')
-//       .then(response => {
-//         member.value = response.data;
-//         memberName.value = member.value.name;
-//       })
-//       .catch(error => {
-//         console.error("멤버 데이터 로딩 중 오류 발생:", error);
-//       });
-//     });
-
-// 강의명 가져오기 - 보류
-// onMounted(async () => {
-//     // console.log(lecture);
-//     // 이름 받아올려고 추가 lectureName.value = lecture.value.name;
-//     apiClient.get('lectures/search')
-//     .then(response => {
-//         lecture.value = response.data;
-//         lectureName.value = lecture.value.name;
-//     })
-//     .catch(error => {
-//         console.error("강의 데이터 로딩 중 오류 발생:", error);
-//     });
-//     });
-
-
-
-// 수강신청 내역 삭제
-
-// const deleteRegistration = async (index) => {
-//   if (confirm('삭제하시겠습니까?')) {
-
-//     await apiClient.delete(`/registrations.value[index].lectureId`)
-//     .then(alert('삭제 완료'))
-
-//     comments.value.splice(index,1);
-//   }
-// };
 
 const deleteRegistration = async (index) => {
     const registrationId = registrations.value[index].registrationId;

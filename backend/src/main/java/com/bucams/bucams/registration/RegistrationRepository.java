@@ -2,8 +2,12 @@ package com.bucams.bucams.registration;
 
 //import com.bucams.bucams.registration.dto.RegistrationCreateDto;
 //import com.bucams.bucams.registration.dto.RegistrationCreateResponseDto;
+import com.bucams.bucams.member.MemberRepository;
+import com.bucams.bucams.member.MemberService;
 import com.bucams.bucams.registration.domain.Registration;
+import com.bucams.bucams.registration.dto.AllRegistrationResponseDto;
 import com.bucams.bucams.registration.dto.RegistrationRequestDto;
+import com.bucams.bucams.registration.dto.RegistrationResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
@@ -15,6 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RegistrationRepository {
     private final EntityManager em;
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
 
     // 수강 신청 내역 생성
@@ -24,11 +30,19 @@ public class RegistrationRepository {
     }
 
     // 자신의 수강 신청 내역 조회
-    public List<RegistrationRequestDto> findRegistrationRequestDtoByMemberId(Long memberId) {
+    public List<RegistrationResponseDto> findRegistrationRequestDtoByMemberId(Long memberId) {
         return em.createQuery(
-                        "SELECT new com.bucams.bucams.registration.dto.RegistrationRequestDto(" +
-                                "r.id, r.member.id, r.lecture.id, r.lecture.name, r.lecture.member.name, r.registeredAt) " +
-                                " FROM Registration r WHERE r.member.id = :memberId", RegistrationRequestDto.class)
+                        "SELECT new com.bucams.bucams.registration.dto.RegistrationResponseDto(" +
+                                "r.id," +
+                                " r.member.id," +
+                                " r.registeredAt, " +
+                                " r.lecture.id," +
+                                " r.lecture.name," +
+                                " r.lecture.member.name," +
+                                " r.lecture.schedule, " +
+                                " r.lecture.type, " +
+                                " r.lecture.credit) " +
+                                " FROM Registration r WHERE r.member.id = :memberId", RegistrationResponseDto.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
 
@@ -61,12 +75,23 @@ public class RegistrationRepository {
 
 
 
-    public List<RegistrationRequestDto> findAllRegistrations() {
-        return em.createQuery(
-                        "SELECT new com.bucams.bucams.registration.dto.RegistrationRequestDto(" +
-                                "r.id, r.member.id, r.lecture.id, r.lecture.name, r.lecture.member.name, r.registeredAt) " +
-                                "FROM Registration r", RegistrationRequestDto.class)
-                .getResultList();
+    public List<AllRegistrationResponseDto> findAllRegistrations() {
+
+            return em.createQuery(
+                    "SELECT new com.bucams.bucams.registration.dto.AllRegistrationResponseDto(" +
+                            "r.id, " +
+                            "r.member.id, " +
+                            "r.registeredAt, " +
+                            "r.lecture.id, " +
+                            "m.name, " +
+                            "r.lecture.name, " +
+                            "r.lecture.member.name, " +
+                            "r.lecture.schedule, " +
+                            "r.lecture.type, " +
+                            "r.lecture.credit) " +
+                    "FROM Registration r " +
+                    "JOIN r.member m", AllRegistrationResponseDto.class)
+            .getResultList();
     }
 
     public List<Registration> findByMemberId(Long studentId) {

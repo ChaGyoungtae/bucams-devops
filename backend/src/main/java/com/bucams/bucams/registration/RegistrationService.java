@@ -9,7 +9,9 @@ import com.bucams.bucams.member.MemberService;
 //import com.bucams.bucams.registration.dto.RegistrationCreateResponseDto;
 import com.bucams.bucams.member.domain.Member;
 import com.bucams.bucams.registration.domain.Registration;
+import com.bucams.bucams.registration.dto.AllRegistrationResponseDto;
 import com.bucams.bucams.registration.dto.RegistrationRequestDto;
+import com.bucams.bucams.registration.dto.RegistrationResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -95,10 +97,10 @@ public class RegistrationService {
 
     // memberID 전달
     @Transactional(readOnly = true)
-    public List<RegistrationRequestDto> findByMemberId(Long memberId) {
-        List<RegistrationRequestDto> registrationRequestDtos = registrationRepository.findRegistrationRequestDtoByMemberId(memberId);
+    public List<RegistrationResponseDto> findByMemberId(Long memberId) {
+        List<RegistrationResponseDto> registrationResponseDtos = registrationRepository.findRegistrationRequestDtoByMemberId(memberId);
 
-        return registrationRequestDtos;
+        return registrationResponseDtos;
     }
 
     // 삭제
@@ -123,7 +125,7 @@ public class RegistrationService {
 
 
     @Transactional(readOnly = true)
-    public List<RegistrationRequestDto> findAllRegistrations() {
+    public List<AllRegistrationResponseDto> findAllRegistrations() {
         return registrationRepository.findAllRegistrations();
     }
 

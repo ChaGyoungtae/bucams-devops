@@ -1,8 +1,7 @@
 package com.bucams.bucams.registration;
 
-//import com.bucams.bucams.registration.dto.RegistrationCreateDto;
-//import com.bucams.bucams.registration.dto.RegistrationCreateResponseDto;
-import com.bucams.bucams.registration.dto.RegistrationRequestDto;
+import com.bucams.bucams.registration.dto.AllRegistrationResponseDto;
+import com.bucams.bucams.registration.dto.RegistrationResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,44 +21,22 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    // 수강신청 내역 생성
-//    public ResponseEntity<Long> createRegistration(RegistrationRequestDto dto) {
-//        Long registrationId = registrationService.createRegistration(dto);
-//        return ResponseEntity.ok().body(registrationId);
-//    }
-
-//    @PostMapping
-//    public ResponseEntity<RegistrationCreateResponseDto> createRegistration(@RequestBody RegistrationCreateDto dto) {
-//        RegistrationCreateResponseDto responseDto = RegistrationService.createRegistration(dto);
-//        return ResponseEntity.ok().body(responseDto);
-//    }
-
     // 자신의 수강신청 내역 조회
     @GetMapping("/{member-id}")
-    public ResponseEntity<List<RegistrationRequestDto>> findByPlaceId(@PathVariable("member-id") Long memberId) {
-        List<RegistrationRequestDto> registrationRequestDto = registrationService.findByMemberId(memberId);
+    public ResponseEntity<List<RegistrationResponseDto>> findByPlaceId(@PathVariable("member-id") Long memberId) {
+        List<RegistrationResponseDto> registrationResponseDtos = registrationService.findByMemberId(memberId);
 
-        return ResponseEntity.ok().body(registrationRequestDto);
+        return ResponseEntity.ok().body(registrationResponseDtos);
 
     }
 
     // 전체 수강신청 내역 조회
 //    perp
     @GetMapping
-    public ResponseEntity<List<RegistrationRequestDto>> findAllRegistrations() {
-        List<RegistrationRequestDto> registrations = registrationService.findAllRegistrations();
+    public ResponseEntity<List<AllRegistrationResponseDto>> findAllRegistrations() {
+        List<AllRegistrationResponseDto> registrations = registrationService.findAllRegistrations();
         return ResponseEntity.ok().body(registrations);
     }
-
-
-//    ver.1
-//    @GetMapping
-//    public ResponseEntity<List<RegistrationRequestDto>> findByRegistrationId(@PathVariable("registration-id") Long registrationId) {
-//        List<RegistrationRequestDto> registrationRequestDto = registrationService.findByregistrationId(registrationId);
-//
-//        return ResponseEntity.ok().body(registrationRequestDto);
-//
-//    }
 
     // 수강신청 취소
     @DeleteMapping("/{registration-id}")
