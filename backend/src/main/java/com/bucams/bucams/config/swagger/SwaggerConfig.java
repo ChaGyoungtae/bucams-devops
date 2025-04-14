@@ -13,7 +13,8 @@ import io.swagger.v3.oas.models.info.Info;
 public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
-        Server server = new Server().url("https://bucams-api.com:30804");
+        // Server server = new Server().url("https://bucams-api.com:30804");
+        Server server = new Server().url("https://cgt.iptime.org:30804");
         return new OpenAPI()
             .addServersItem(server)
             .info(new Info()
