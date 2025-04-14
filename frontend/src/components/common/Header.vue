@@ -11,7 +11,7 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle px-2 text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              내 정보 조회
+              내 정보 조회하기
             </a>
             <ul class="dropdown-menu">
               <li>
